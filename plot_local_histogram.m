@@ -1,4 +1,4 @@
-function plot_local_histogram(filename, depth=14, kernel_size=3, acc_fact = 5)
+function plot_local_histogram(filename, depth=14, acc_fact = 5, kernel_size=3, h=480, w=640)
     #
     # Usage : plot_local_histogram(filename, depth, kernel_size)
     #   Plots the medians of local histograms of an image based on kernel
@@ -6,15 +6,18 @@ function plot_local_histogram(filename, depth=14, kernel_size=3, acc_fact = 5)
     # Parameters :
     #   filename (string) : the name of the image file
     #   depth (int) : depth of the pixels, default = 14
+    #   acc_fact (int) : acceptability factor for the histogram, default = 5
     #   kernel_size (int) : size of the kernel on which to apply local histogram, default = 3
+    #   h (int) : height of the image, number of lines
+    #   w (int) : width of the image, number of columns
     #
-
-    img_mtx = imread(filename);
+    % read the file whatver the extension
+    img_mtx = read_file(filename, h, w);
 
     ker_histo = kernel_histogram(img_mtx, kernel_size, depth);
     stats = stats_vct(ker_histo);
 
-    plotting_stats(ker_histo, stats)
+    plotting_stats(ker_histo, stats);
 endfunction
 
 function ker_histo = kernel_histogram(img_mtx, kernel_size=3, depth=14)
@@ -33,10 +36,12 @@ function ker_histo = kernel_histogram(img_mtx, kernel_size=3, depth=14)
     #
     [h,w] = size(img_mtx);
     ker_histo = zeros(1,2^depth);
+    border = floor(kernel_size/2);
+
     % for loops on the image with no padding
-    for i=2:h-1
-        for j=2:w-1
-            completion((h-1)*(w-1), i*h+j, "Computing local histogram ")
+    for i=1+border:h-border
+        for j=1+border:w-border
+            completion((h-2)*(w-2), (i-2)*(w-2)+(j-1), "Computing local histogram "); % completion status
             kernel_med = local_median(img_mtx, i, j, kernel_size);
             % vector 1:2^depth => shifting of histogram to avoid out of bound
             ker_histo(kernel_med+1) += 1;

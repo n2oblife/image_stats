@@ -1,4 +1,4 @@
-function plot_global_histogram(filename, depth = 14, acc_fact = 5)
+function plot_global_histogram(filename, depth = 14, acc_fact = 5, h=480, w=640)
     #
     # Usage : plot_stats(histo, stats)
     #   Plots the histogram of the image with the mean and standard deviation lines
@@ -6,12 +6,14 @@ function plot_global_histogram(filename, depth = 14, acc_fact = 5)
     # Parameters :
     #   filename (char) : path to the file from which to plot statistics
     #   depth (int) : depth of the pixels, default = 14
-    #   acc_fact (int) : acce
+    #   acc_fact (int) : acceptability factor for the histogram, default = 5
+    #   h (int) : height of the image, number of lines
+    #   w (int) : width of the image, number of columns
     #
+    % read the file whatver the extension
+    img_mtx = read_file(filename, h, w);
 
-    img_mtx = imread(filename);
-
-    histo = histogram_mtx(img_mtx, depth=14)
+    histo = histogram_mtx(img_mtx, depth);
     stats = stats_img(img_mtx);
     
     plotting_stats(histo, stats, acc_fact);
@@ -32,7 +34,6 @@ function histo = histogram_mtx(img_mtx, depth=14)
     #   histo (array) : histogram of the matrix 
     [h,w] = size(img_mtx);
     histo = zeros(1,2^depth);
-    printf("Size of histo %d \n", size(histo)(2));
     for i=1:h
         for j=1:w
             px_value = img_mtx(i,j); % dans le code de R sanchez, ajout de 2^14 / 2 ? Ne semble pas nécessaire
