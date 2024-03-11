@@ -17,7 +17,6 @@ function plot_global_histogram(filename, depth = 14, acc_fact = 5, h=480, w=640)
     stats = stats_img(img_mtx);
     
     plotting_stats(histo, stats, acc_fact);
-
 endfunction
 
 

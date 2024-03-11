@@ -14,13 +14,15 @@ function plot_local_histogram(filename, depth=14, acc_fact = 5, kernel_size=3, h
     % read the file whatver the extension
     img_mtx = read_file(filename, h, w);
 
-    ker_histo = kernel_histogram(img_mtx, kernel_size, depth);
-    stats = stats_vct(ker_histo);
+    % builds an histogram from local kernels with median extraction
+    % saves all values in a vector to compute stats from the median values of local histograms
+    [ker_histo, medians_vector] = kernel_histogram(img_mtx, kernel_size, depth);
+    stats = stats_vct(medians_vector);
 
     plotting_stats(ker_histo, stats);
 endfunction
 
-function ker_histo = kernel_histogram(img_mtx, kernel_size=3, depth=14)
+function [ker_histo, med_vct] = kernel_histogram(img_mtx, kernel_size=3, depth=14)
     #
     # Usage : kernel_histogram(img_mtx, kernel_size, depth)
     #   Computes the histogram of a little matrix image according to depth of pixels 
@@ -35,16 +37,20 @@ function ker_histo = kernel_histogram(img_mtx, kernel_size=3, depth=14)
     #   histo (array) : histogram of the matrix by kernels
     #
     [h,w] = size(img_mtx);
-    ker_histo = zeros(1,2^depth);
     border = floor(kernel_size/2);
+
+    ker_histo = zeros(1,2^depth);
+    med_vct = zeros(1,(h-2*border)*(w-2*border));
 
     % for loops on the image with no padding
     for i=1+border:h-border
         for j=1+border:w-border
-            completion((h-2)*(w-2), (i-2)*(w-2)+(j-1), "Computing local histogram "); % completion status
+            % completion status
+            completion((h-2*border)*(w-2*border), (i-(1+border))*(w-2*border)+(j-border), "Computing local histogram ");
             kernel_med = local_median(img_mtx, i, j, kernel_size);
             % vector 1:2^depth => shifting of histogram to avoid out of bound
             ker_histo(kernel_med+1) += 1;
+            med_vct((i-(1+border))*(w-2*border)+(j-border)) = kernel_med;
         endfor
     endfor
 endfunction
@@ -71,31 +77,6 @@ function kernel_med = local_median(img_mtx, x, y, kernel_size=3)
     % we choose randomly between floor and ceil function to minimize bias when choosing mediane
     random_picking = [floor(len/2), ceil(len/2)]( randi(2) );
     kernel_med = sorted_kernel(random_picking);
-endfunction
-
-
-function buffer = buff_switching(img_mtx, x, y, kernel_size = 3)
-    # 
-    # Usage : buff_switching(img_mtx, x, y, kernel_size)
-    #   Switch elemnts of the buffer along with the movement of the kernel
-    #
-    # Paramters:
-    #   img_mtx (array of arrays) : matrix image
-    #   x (int) : coordinate x in the image
-    #   y (int) : coordinate y in the image
-    #   kernel_size (int) : size of the kernel, default = 3
-    #
-    # Returns :
-    #   buffer (array) : array of values of the kernel around (x,y)
-    #
-    buffer = zeros(1,kernel_size^2);
-    border = floor(kernel_size/2);
-    for k=1:kernel_size
-        for m=1:kernel_size
-            % save the elements of the kernel in a buffer for comparison and simulating
-            buffer((k-1)*kernel_size+m) = img_mtx(x + (k-1) - border, y + (m-1) - border);
-        endfor
-    endfor
 endfunction
 
 

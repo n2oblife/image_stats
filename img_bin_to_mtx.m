@@ -1,4 +1,4 @@
-function mtx_img = img_bin_to_mtx(filename, h, w, show=false)
+function mtx_img = img_bin_to_mtx(filename, h, w, show_img=false)
   # Usage : img_bin_to_mtx(filename, h, w, precision)
   #   A function which returns a converted matrix image of size (h,w) from a .bin
   #
@@ -6,6 +6,7 @@ function mtx_img = img_bin_to_mtx(filename, h, w, show=false)
   #   filename (char) : path to the file to be converted
   #   h (int) : height of the image, number of lines
   #   w (int) : width of the image, number of columns
+  #   show_img (bool) : choosing to plot the image
   #
   # Returns :
   #   mtx_img (array of arrays) : image converted from the .bin file
@@ -19,7 +20,7 @@ function mtx_img = img_bin_to_mtx(filename, h, w, show=false)
     endfor
   endfor
 
-  if (show)
+  if (show_img)
     imshow(mtx_img);
   endif
   fclose(fid);
