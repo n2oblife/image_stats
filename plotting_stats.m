@@ -15,16 +15,25 @@ function plotting_stats(histo, stats, acc_fact=5)
 
     resized_cumsum = max_height/cumul_sum(len)*cumul_sum;
 
+    % [mean_, median_, var_, std_, mad_] = stats;
+    mean_ = stats(1);
+    median_ = stats(2);
+    var_ = stats(3);
+    std_ = stats(4);
+    mad_ = stats(5);
+
     plot((1:len), resized_cumsum, 'k--',
         (1:len),histo, 'm',
-        [stats(1),stats(1)], [0, max_height], 'r',
-        [stats(2),stats(2)], [0, max_height], 'g',
-        % [stats(1) - stats(3),stats(1) - stats(3)], [0, max_height], 'b--',
-        % [stats(1) + stats(3),stats(1) + stats(3)], [0, max_height], 'b--',
-        [stats(2) - stats(4),stats(2) - stats(4)], [0, max_height], 'y--',
-        [stats(2) + stats(4),stats(2) + stats(4)], [0, max_height], 'y--',
-        [stats(2) - acc_fact*stats(4),stats(2) - acc_fact*stats(4)], [0, max_height], 'c--',
-        [stats(2) + acc_fact*stats(4),stats(2) + acc_fact*stats(4)], [0, max_height], 'c--'
+        [mean_,mean_], [0, max_height], 'r',
+        [median_,median_], [0, max_height], 'g',
+        % [mean_ - var_,mean_ - var], [0, max_height], 'b--',
+        % [mean_ + var_,mean_ + var], [0, max_height], 'b--',
+        % [median_ - std_,median_ - std_], [0, max_height], 'y--',
+        % [median_ + std_,median_ + std_], [0, max_height], 'y--',
+        [median_ - acc_fact*std_,median_ - acc_fact*std_], [0, max_height], 'c--',
+        [median_ + acc_fact*std_,median_ + acc_fact*std_], [0, max_height], 'c--',
+        [median_ - acc_fact*mad_,median_ - acc_fact*mad_], [0, max_height], 'b--',
+        [median_ + acc_fact*mad_,median_ + acc_fact*mad_], [0, max_height], 'b--'
         );   
     title("Histogram with mean and standard deviation lines");
     xlabel("Pixel value");

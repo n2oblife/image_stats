@@ -13,7 +13,7 @@ function img_mtx = read_img_file(filename, h=480, w=60, show_img=false)
     #   img_mtx (array of arrays) : matrix of the image
     #
     [~,~,extension] = fileparts(filename);
-    % TODO add other data type that need tio be read differently
+    % TODO add other data type that need to be read differently
     if (extension == '.bin')
         img_mtx = img_bin_to_mtx(filename, h,w);
     else
@@ -21,6 +21,6 @@ function img_mtx = read_img_file(filename, h=480, w=60, show_img=false)
     endif
 
     if (show_img)
-        imshow(img_mtx);
+        imshow(img_mtx)
     endif
 endfunction

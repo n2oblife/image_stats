@@ -1,22 +1,24 @@
-function plot_global_histogram(filename, depth = 14, acc_fact = 5, h=480, w=640)
+function stats = plot_global_histogram(filename, depth = 14, acc_fact = 5, h=480, w=640, show_fig = true)
     #
     # Usage : plot_stats(histo, stats)
     #   Plots the histogram of the image with the mean and standard deviation lines
     #
     # Parameters :
-    #   filename (char) : path to the file from which to plot statistics
+    #   filename (char) : path to the file (in unix style) from which to plot statistics
     #   depth (int) : depth of the pixels, default = 14
     #   acc_fact (int) : acceptability factor for the histogram, default = 5
     #   h (int) : height of the image, number of lines
     #   w (int) : width of the image, number of columns
     #
     % read the file whatver the extension
-    img_mtx = read_file(filename, h, w);
+    img_mtx = read_img_file(filename, h, w);
 
     histo = histogram_mtx(img_mtx, depth);
     stats = stats_img(img_mtx);
     
-    plotting_stats(histo, stats, acc_fact);
+    if (show_fig)
+        plotting_stats(histo, stats, acc_fact);
+    endif
 endfunction
 
 
@@ -36,7 +38,6 @@ function histo = histogram_mtx(img_mtx, depth=14)
     for i=1:h
         for j=1:w
             px_value = img_mtx(i,j); % dans le code de R sanchez, ajout de 2^14 / 2 ? Ne semble pas nécessaire
-            % printf("value of a pixel : %d \n", px_value);
             histo(px_value +1 ) += + 1;
         endfor
     endfor
@@ -60,6 +61,8 @@ function img_stats = stats_img(img_mtx)
     % img_stats(2) = my_median(img_vct);
     img_stats(3) = var(img_vct);
     img_stats(4) = std(img_vct); % standard deviation
+    img_stats(5) = mad(img_vct); % mean absolute deviation
+    
 endfunction
 
 function med = my_median(vector)

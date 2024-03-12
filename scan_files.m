@@ -1,7 +1,7 @@
 global handeled_list = zeros(1,2^32);
 global writing_idx = 1;
 
-function scan_files(initialPath, extensions, fileHandler)
+function scan_files(initialPath, extensions, fileHandler, args)
     # 
     # Usage : scan_files(initialPath, extensions, fileHandler)
     #   Parse a path and all its directories to apply the fileHandler on the files
@@ -31,7 +31,7 @@ function scan_files(initialPath, extensions, fileHandler)
                             "parent",regexp(curDir.folder,'[^\\\/]*$','match'),
                             "bytes",curDir.bytes);
             
-            handeled_list(writing_idx) = function(cstrcat(file.path, file.name));
+            handeled_list(writing_idx) = fileHandler(cstrcat(file.path, file.name));
             writing_idx += 1;
         endif
     end
