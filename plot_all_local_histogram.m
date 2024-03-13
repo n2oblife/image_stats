@@ -1,4 +1,4 @@
-function plot_all_local_histogram(initialPath, acc_fact = 5, kernel_size = 3, steps = 1, extension = '.bin')
+function listOfStats = plot_all_local_histogram(initialPath, acc_fact = 5, kernel_size = 3, steps = 1, extension = '.bin')
     #
     # Usage : plot_all_local_histogram(initialPath, acc_fact, kernel_size, steps, extension)
     #   Plots statistics from local histograms of all files in the directory initialPath
@@ -44,51 +44,6 @@ function plot_all_local_histogram(initialPath, acc_fact = 5, kernel_size = 3, st
 endfunction
 
 
-function depth = get_depth(filename)
-    #
-    # Usage : depth = get_depth(filename)
-    #   Returns the depth of the image from its filename
-    #   Expected format : '<other>_pMono<depth>'
-    #
-    # Parameters :
-    #   filename (string) : the name of the file
-    #
-    [~,len] = size(filename);
-    pMono = filename(len-1:len);
-    % TODO add other cases when bits will be different
-    if (pMono == '14')
-        depth = 14;
-    elseif (pMono == 'o8')
-        depth = 8; 
-    endif
-endfunction
-
-function [h_, w_] = get_dim(filename)
-    #
-    # Usage : get_dim(filename)
-    #   Returns the dimensions of the image from its filename.
-    #   Expected format : '<other>_w<width>_h<height>_<other>'
-    #
-    # Parameters :
-    #   filename (string) : the name of the file
-    #
-    # Returns :
-    #   h_ (int) : the height of the image
-    #   w_ (int) : the width of the image
-    #
-    % split the filename by '_'
-    str_list = strsplit(filename, '_');
-    [~,len] = size(str_list);
-    for id = 1:len
-        stringed = char(str_list(1,id));
-        if (stringed(1) == 'w')
-            w_ = str2num(substr(stringed, 2));
-        elseif (stringed(1) == 'h')
-            h_ = str2num(substr(stringed, 2));
-        endif
-    endfor
-endfunction
-
 function many_stats = stats_on_stats(stats_vct)
     #
     # Usage : stats_on_stats(stats_vct)
@@ -120,9 +75,11 @@ function plotting_stats_of_stats(listOfStats)
     # Parameters :
     #   listOfStats (cell) : the cell containing the statistics of the local histograms
     #
-    printf('Stats on the std of all images :');
-    std_stats = stats_on_stats(listOfStats(:,4))
-    printf('Stats on the mad of all images :');
+    listOfStats
+    listOfStats = cell2mat(listOfStats);
+    printf('Stats on the std of all images :\n');
+    std_stats = stats_on_stats(listOfStats(:, 4))
+    printf('Stats on the mad of all images :\n');
     mad_stats = stats_on_stats(listOfStats(:,5))
 
     sorted_stats = sortrows(listOfStats, 2);
