@@ -22,7 +22,7 @@ function stats = plot_local_histogram(
     [ker_histo, medians_vector] = median_kernel_histogram(
         img_mtx, kernel_size, depth, steps
         );
-    stats = stats_vector(medians_vector)
+    stats = stats_vector(medians_vector);
 
     if (show_fig)
         plotting_stats(ker_histo, stats);
@@ -55,7 +55,7 @@ function [ker_histo, med_vct] = median_kernel_histogram(img_mtx, kernel_size=3, 
         for j=1+border:steps:w-border
             % completion status
             completion((h-2*border)*(w-2*border)/steps, ((i-(1+border))*(w-2*border)+(j-border))/steps , "Computing local histogram ");
-            kernel_med = local_median(img_mtx, i, j, kernel_size);
+            kernel_med = median_filter(img_mtx, i, j, kernel_size);
             % vector 1:2^depth => shifting of histogram to avoid out of bound
             ker_histo(kernel_med+1) += 1;
             med_vct((i-(1+border))*(w-2*border)+(j-border)) = kernel_med;

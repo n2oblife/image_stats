@@ -12,7 +12,7 @@ function listOfStats = plot_all_local_histogram(initialPath, acc_fact = 5, kerne
     #
     initialDir = dir(initialPath);
     writing_idx = 0;
-    listOfStats = cell(1,length(initialDir));
+    listOfStats = cell(1,length(initialDir)-2);
     printf('Scanning the directory - %s ...\n', initialPath);
 
     for idx = 1 : length(initialDir) 
@@ -34,8 +34,6 @@ function listOfStats = plot_all_local_histogram(initialPath, acc_fact = 5, kerne
             writing_idx += 1;
             listOfStats(writing_idx) = plot_local_histogram(file.path, depth, acc_fact, kernel_size, h, w, steps, false);
             % listOfStats(writing_idx) = plot_global_histogram(file.path);
-            % listOfStats
-
         endif
     endfor
 
@@ -44,7 +42,7 @@ function listOfStats = plot_all_local_histogram(initialPath, acc_fact = 5, kerne
 endfunction
 
 
-function many_stats = stats_on_stats(stats_vct)
+function img_stats = stats_on_stats(stats_vct)
     #
     # Usage : stats_on_stats(stats_vct)
     #   Returns the mean, median, variance and standard deviation of the given vector
@@ -75,8 +73,7 @@ function plotting_stats_of_stats(listOfStats)
     # Parameters :
     #   listOfStats (cell) : the cell containing the statistics of the local histograms
     #
-    listOfStats
-    listOfStats = cell2mat(listOfStats);
+    listOfStats = cellToMat(listOfStats)
     printf('Stats on the std of all images :\n');
     std_stats = stats_on_stats(listOfStats(:, 4))
     printf('Stats on the mad of all images :\n');

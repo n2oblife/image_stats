@@ -12,7 +12,6 @@ function plotting_stats(histo, stats, acc_fact=5)
     max_height = max(histo);
     [~,len]=size(histo);
     cumul_sum = cumsum(histo);
-
     resized_cumsum = max_height/cumul_sum(len)*cumul_sum;
 
     % [mean_, median_, var_, std_, mad_] = stats;

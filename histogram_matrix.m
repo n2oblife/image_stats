@@ -11,6 +11,7 @@ function histo = histogram_mtx(img_mtx, depth=14)
     #   histo (array) : histogram of the matrix 
     [h,w] = size(img_mtx);
     histo = zeros(1,2^depth);
+    printf("Computing global histogram ...\n");
     for i=1:h
         for j=1:w
             px_value = img_mtx(i,j); % dans le code de R sanchez, ajout de 2^14 / 2 ? Ne semble pas nécessaire

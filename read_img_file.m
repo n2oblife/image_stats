@@ -1,4 +1,4 @@
-function img_mtx = read_img_file(filename, h=480, w=60, show_img=false)
+function img_mtx = read_img_file(filename, h=480, w=640, show_img=false)
     #
     # Usage : read_img_file(filename, h, w)
     #   Reads any type of file image regardless of the file extension

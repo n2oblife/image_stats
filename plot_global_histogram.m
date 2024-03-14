@@ -15,8 +15,8 @@ function stats = plot_global_histogram(
     % read the file whatver the extension
     img_mtx = read_img_file(filename, h, w);
 
-    histo = histogram_mtx(img_mtx, depth);
-    stats = stats_vector(img_mtx)
+    histo = histogram_matrix(img_mtx, depth);
+    stats = stats_vector(img_mtx);
     
     if (show_fig)
         plotting_stats(histo, stats, acc_fact);

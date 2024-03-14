@@ -25,7 +25,7 @@ endfunction
 function filtered_img = compute_mask(img_mtx, filter_msk, show_img=false)
     #
     # Usage : compute_mask(img_mtx, filter_msk, show_img)
-    #   Apply a mask on a matrix image
+    #   Apply a mask on a matrix image without padding
     #
     # Parameters :
     #   img_mtx (array of arrays) : matrix image
