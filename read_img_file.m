@@ -1,4 +1,4 @@
-function img_mtx = read_img_file(filename, h=480, w=640, show_img=false)
+function img_mtx = read_img_file(filename, h=480, w=640, depth = 8, show_img=false)
     #
     # Usage : read_img_file(filename, h, w)
     #   Reads any type of file image regardless of the file extension
@@ -15,12 +15,12 @@ function img_mtx = read_img_file(filename, h=480, w=640, show_img=false)
     [~,~,extension] = fileparts(filename);
     % TODO add other data type that need to be read differently
     if (extension == '.bin')
-        img_mtx = img_bin_to_mtx(filename, h,w);
+        img_mtx = img_bin_to_mtx(filename, h,w, depth);
     else
         img_mtx = imread(filename);
     endif
 
     if (show_img)
-        imshow(img_mtx)
+        imshow(img_mtx, gray(2^depth));
     endif
 endfunction

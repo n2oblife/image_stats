@@ -1,5 +1,5 @@
 function [big_res, big_bound] = test_rm_bad_px(
-    filepath, acc_fact = 5, kernel_size = 3, steps = 1, extension = '.bin', show_gif = true
+    filepath, acc_fact = 5, kernel_size = 3, steps = 1, extension = '.bin', show_fig = true
     )
     #
     # Usage : stats = test_rm_bad_px(filepath, acc_fact, kernel_size, steps, extension)
@@ -8,7 +8,7 @@ function [big_res, big_bound] = test_rm_bad_px(
     depth = get_depth(name_no_ext);
     [h,w] = get_dim(name_no_ext);
 
-    img_mtx = read_img_file(filepath, h, w);
+    img_mtx = read_img_file(filepath, h, w, depth);
     histo = histogram_matrix(img_mtx, depth); 
 
     %% rpz des limites des zones d'acceptabilité avec maj des limites
@@ -57,7 +57,7 @@ function [big_res, big_bound] = test_rm_bad_px(
         img_mtx, acc_fact*mean_stats(4), kernel_size, h, w
         );
 
-    big_res = [res_global, res_global_local_med, res_local_global_med,res_local, res_local_mean];
+    big_res = {res_global; res_global_local_med; res_local_global_med; res_local; res_local_mean};
     big_bound = [bound_min_global, bound_max_global;
         bound_min_global_local_med, bound_max_global_local_med;
         bound_min_local_global_med, bound_max_local_global_med;
@@ -131,37 +131,40 @@ endfunction
 
 function plot_overall(img_mtx, histo, big_res, big_bound)
     clf;
+    depth = log2(length(histo));
     % plot og image
-    imshow(img_mtx);
+    imshow(img_mtx, gray(2^depth));
     title("Original picture");
     % plot images of the bad pixels
-    imshow(big_res(1));
+    imshow(big_res{1}, gray(2^depth));
     title("Original picture");
-    imshow(big_res(2));
+    imshow(big_res{2}, gray(2^depth));
     title("Original picture");
-    imshow(big_res(3));
+    imshow(big_res{3}, gray(2^depth));
     title("Original picture");
-    imshow(big_res(4));
+    imshow(big_res{4}, gray(2^depth));
     title("Original picture");
-    imshow(big_res(5));
+    imshow(big_res{5}, gray(2^depth));
     title("Original picture");
 
     % plot acceptabiilty zone according to global histo
     len=length(histo);
+    max_height = max(histo);
     cumul_sum = cumsum(histo);
-    resized_cumsum = max_height/cumul_sum(len)*cumul_sum;    
+    resized_cumsum = max_height/cumul_sum(len)*cumul_sum;
+
     plot((1:len), resized_cumsum, 'k--',
         (1:len),histo, 'm',
-        [big_res(1,1),big_res(1,1)], [0, max_height], 'c--',
-        [big_res(2,1),big_res(2,1)], [0, max_height], 'g--',
-        [big_res(3,1),big_res(3,1)], [0, max_height], 'b--',
-        [big_res(4,1),big_res(4,1)], [0, max_height], 'y--',
-        [big_res(5,1),big_res(5,1)], [0, max_height], 'r--',
-        [big_res(1,2),big_res(1,2)], [0, max_height], 'c--',
-        [big_res(2,2),big_res(2,2)], [0, max_height], 'g--',
-        [big_res(3,2),big_res(3,2)], [0, max_height], 'b--',
-        [big_res(4,2),big_res(4,2)], [0, max_height], 'y--',
-        [big_res(5,2),big_res(5,2)], [0, max_height], 'r--'
+        [big_bound(1,1),big_bound(1,1)], [0, max_height], 'c--',
+        [big_bound(2,1),big_bound(2,1)], [0, max_height], 'g--',
+        [big_bound(3,1),big_bound(3,1)], [0, max_height], 'b--',
+        [big_bound(4,1),big_bound(4,1)], [0, max_height], 'y--',
+        [big_bound(5,1),big_bound(5,1)], [0, max_height], 'r--',
+        [big_bound(1,2),big_bound(1,2)], [0, max_height], 'c--',
+        [big_bound(2,2),big_bound(2,2)], [0, max_height], 'g--',
+        [big_bound(3,2),big_bound(3,2)], [0, max_height], 'b--',
+        [big_bound(4,2),big_bound(4,2)], [0, max_height], 'y--',
+        [big_bound(5,2),big_bound(5,2)], [0, max_height], 'r--'
     );
     title("Histogram with acceptability zone according to method");
     xlabel("Pixel value");
