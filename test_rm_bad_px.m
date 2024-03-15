@@ -4,6 +4,8 @@ function [big_res, big_bound] = test_rm_bad_px(
     #
     # Usage : stats = test_rm_bad_px(filepath, acc_fact, kernel_size, steps, extension)
     #
+    printf('Scanning the file - %s ...\n', filepath);
+
     [~,name_no_ext,~] = fileparts(filepath);
     depth = get_depth(name_no_ext);
     [h,w] = get_dim(name_no_ext);
@@ -49,7 +51,7 @@ function [big_res, big_bound] = test_rm_bad_px(
 
     % traitement local selon la mediane des medianes locales
     [res_local, bound_min_local, bound_max_local] = local_rm(
-        img_mtx, 0, kernel_size, h, w
+        img_mtx, 0, kernel_size, h, w, acc_fact -2
         );
     
     % traitement local selon la moyenne des histo locaux
@@ -90,7 +92,7 @@ endfunction
 
 
 function [res, bound_min, bound_max] = local_rm(
-    img_mtx, threshold=0, kernel_size = 3, h=480, w=640
+    img_mtx, threshold=0, kernel_size = 3, h=480, w=640, acc_fact = 5
     )
     % tells if there is a need to compute threshold each time
     update_threshold = (threshold == 0);
@@ -107,7 +109,7 @@ function [res, bound_min, bound_max] = local_rm(
                 sorted_kernel = kernel_values(img_mtx, i, j, kernel_size);
                 kernel_stats = stats_vector(sorted_kernel);
                 mid = kernel_stats(2);
-                threshold = kernel_stats(4);
+                threshold = acc_fact * kernel_stats(4);
             else
                 mid = median_filter(img_mtx, i, j, kernel_size);
             endif
@@ -136,16 +138,21 @@ function plot_overall(img_mtx, histo, big_res, big_bound)
     imshow(img_mtx, gray(2^depth));
     title("Original picture");
     % plot images of the bad pixels
+    figure();
     imshow(big_res{1}, gray(2^depth));
-    title("Original picture");
+    title("Global");
+    figure();
     imshow(big_res{2}, gray(2^depth));
-    title("Original picture");
+    title("Global median");
+    figure();
     imshow(big_res{3}, gray(2^depth));
-    title("Original picture");
+    title("Local on global median");
+    figure();
     imshow(big_res{4}, gray(2^depth));
-    title("Original picture");
+    title("Local");
+    figure();
     imshow(big_res{5}, gray(2^depth));
-    title("Original picture");
+    title("Local mean");
 
     % plot acceptabiilty zone according to global histo
     len=length(histo);
@@ -153,6 +160,7 @@ function plot_overall(img_mtx, histo, big_res, big_bound)
     cumul_sum = cumsum(histo);
     resized_cumsum = max_height/cumul_sum(len)*cumul_sum;
 
+    figure();
     plot((1:len), resized_cumsum, 'k--',
         (1:len),histo, 'm',
         [big_bound(1,1),big_bound(1,1)], [0, max_height], 'c--',

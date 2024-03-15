@@ -5,7 +5,7 @@ function mean_local_stats = mean_local_histogram(
     # Usage :
     #
     % read the file whatever the extension
-    img_mtx = read_img_file(filename, h, w);
+    img_mtx = read_img_file(filename, h, w, depth);
 
     all_local_stats = local_mean_computation(
         img_mtx, kernel_size, steps
