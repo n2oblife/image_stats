@@ -1,4 +1,5 @@
 function plot_bad_px_naive(filepath, value, h=480, w=640)
+    % no use
     img_mtx = read_img_file(filepath, h, w);
 
     list_position = get_position(img_mtx, value);

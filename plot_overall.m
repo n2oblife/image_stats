@@ -1,4 +1,5 @@
 function plot_overall(img_mtx, histo, big_res, big_bound)
+    % unique use 
     clf;
     depth = log2(length(histo));
     % plot og image

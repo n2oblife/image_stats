@@ -1,9 +1,23 @@
 function [big_res, big_bound] = test_rm_bad_px(
     filepath, acc_fact = 5, kernel_size = 3, steps = 1, extension = '.bin', show_fig = true
     )
-    #
-    # Usage : stats = test_rm_bad_px(filepath, acc_fact, kernel_size, steps, extension)
-    #
+    %
+    % Usage : [big_res, big_bound] = test_rm_bad_px(filepath, acc_fact, kernel_size, steps, extension, show_fig)
+    %   Function to test and remove bad pixels from an image
+    %
+    % Parameters :
+    %   filepath (char): Path to the image file
+    %   acc_fact (int): Accumulation factor, default is 5
+    %   kernel_size (int): Size of the kernel for local processing, default is 3
+    %   steps (int): Step size for iteration, default is 1
+    %   extension (char): Extension of the image file, default is '.bin'
+    %   show_fig (logical): Flag to control whether to display figures, default is true
+    %
+    % Returns :
+    %   big_res (cell array): Result of different processing methods
+    %   big_bound (matrix): Boundary values for different processing methods
+    %
+
     printf('Scanning the file - %s ...\n', filepath);
 
     [~,name_no_ext,~] = fileparts(filepath);
