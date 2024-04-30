@@ -1,4 +1,4 @@
-function mean_local_stats = mean_local_histogram(
+function [mean_local_stats, acc_var] = mean_local_histogram(
     filename, depth=14, acc_fact = 5, kernel_size=3, h=480, w=640, steps = 1, show_fig = true
     )
     %
@@ -34,6 +34,9 @@ function mean_local_stats = mean_local_histogram(
     full_var = mean(all_local_stats(:,3)); % Mean of variance values
     full_std = mean(all_local_stats(:,4)); % Mean of standard deviation values
     full_mad = mean(all_local_stats(:,5)); % Mean of median absolute deviation values
+
+    % Compute the sum of variances of the img
+    acc_var = sum(all_local_stats(:,3))
 
     % Combine mean statistics into a single array
     mean_local_stats = [full_mean, full_mad, full_var, full_std, full_mad];

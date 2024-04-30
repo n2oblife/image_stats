@@ -14,7 +14,7 @@ function img_mtx = read_img_file(filename, h=480, w=640, depth = 8, show_img=fal
     #
     [~,~,extension] = fileparts(filename);
     % TODO add other data type that need to be read differently
-    if (extension == '.bin')
+    if (extension == '.bin' || extension == '.raw')
         img_mtx = img_bin_to_mtx(filename, h,w, depth);
     else
         img_mtx = imread(filename);

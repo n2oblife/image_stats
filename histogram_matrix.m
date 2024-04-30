@@ -15,7 +15,7 @@ function histo = histogram_matrix(img_mtx, depth=14)
     for i=1:h
         for j=1:w
             px_value = img_mtx(i,j); % dans le code de R sanchez, ajout de 2^14 / 2 ? Ne semble pas nécessaire
-            histo(px_value +1 ) += + 1; % shift à cause de l'indexation de matlab
+            histo(px_value +1 ) += 1; % shift à cause de l'indexation de matlab
         endfor
     endfor
 endfunction
