@@ -73,6 +73,12 @@ function [big_res, big_bound] = test_rm_bad_px(
         img_mtx, acc_fact*mean_stats(4), kernel_size, h, w
         );
 
+    % to get the bad pixel position then write :
+    % extract the matrix from the cell array
+    % res_local_mean_matrix = res_local_mean{1}
+    % find(res_local_mean_matrix == 256); to get the positions of the bad pixels in a list
+    % [row, col] = ind2sub([h, w], res_local_mean_matrix);  vectors containing the row and column indices of the bad pixels, respectively
+
     big_res = {res_global; res_global_local_med; res_local_global_med; res_local; res_local_mean};
     big_bound = [bound_min_global, bound_max_global;
         bound_min_global_local_med, bound_max_global_local_med;
@@ -131,6 +137,7 @@ function [res, bound_min, bound_max] = local_rm(
             % check pixel value
             if (img_mtx(i,j) < mid - threshold || img_mtx(i,j) > mid + threshold)
                 res(i,j) = 256;
+
             endif
 
             % update the bound at each pixel to show acceptability zone
