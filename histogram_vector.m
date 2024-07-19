@@ -12,7 +12,7 @@ function histo = histogram_vector(vector, depth=8)
     histo = zeros(1,2^depth);
     printf("Computing histogram ...\n");
     for idx=1:length(vector)
-            px_value = round(vector(idx));
-            histo(px_value +1 ) += 1; % shift à cause de l'indexation de matlab
+        px_value = round(vector(idx));
+        histo(px_value +1 ) += 1; % shift à cause de l'indexation de matlab
     endfor
 endfunction

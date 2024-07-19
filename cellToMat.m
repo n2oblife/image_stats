@@ -25,6 +25,7 @@ function mat = cellToMat(cell_)
     mat = zeros(h,w);
     for i = 1:h
         for j = 1:w
+            completion(h*w, i*w+j, "Converting cell to matrix ");
             mat(i,j) = cell_{i}(j);
         endfor
     endfor
