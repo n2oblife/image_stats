@@ -1,4 +1,4 @@
-function [big_res, big_bound] = test_rm_bad_px(
+function [big_res, big_bound, h, w] = test_rm_bad_px(
     filepath, acc_fact = 5, kernel_size = 3, steps = 1, extension = '.bin', show_fig = true
     )
     %
@@ -75,9 +75,9 @@ function [big_res, big_bound] = test_rm_bad_px(
 
     % to get the bad pixel position then write :
     % extract the matrix from the cell array
-    % res_local_mean_matrix = res_local_mean{1}
-    % find(res_local_mean_matrix == 256); to get the positions of the bad pixels in a list
-    % [row, col] = ind2sub([h, w], res_local_mean_matrix);  vectors containing the row and column indices of the bad pixels, respectively
+    % res_local_mean_matrix = big_res(5){1}.'; - to get the matrix from output and then transpose it
+    % find(res_local_mean_matrix == 256); - to get the positions of the bad pixels in a list
+    % [row, col] = ind2sub([h, w], res_local_mean_matrix); - vectors containing the row and column indices of the bad pixels, respectively
 
     big_res = {res_global; res_global_local_med; res_local_global_med; res_local; res_local_mean};
     big_bound = [bound_min_global, bound_max_global;
