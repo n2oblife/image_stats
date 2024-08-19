@@ -28,6 +28,9 @@ function pos_list = test_bp_pv(
     % Find the positions of the bad pixels in a list
     pos_list = find(res_local_mean_matrix == 256);
 
+    % Unbias the pos_list by subtracting 1 from each element
+    pos_list = pos_list - 1;
+
     % Alternatively, you can get the row and column indices of the bad pixels
     % [row, col] = ind2sub([h, w], res_local_mean_matrix); % vectors containing the row and column indices of the bad pixels, respectively
 endfunction
